@@ -1,0 +1,25 @@
+{
+  "name": "rabbitee",
+  "version": "0.0.1",
+  "description": "The simplest EventEmitter Rabbit wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kimonniez/rabbitEE.git"
+  },
+  "keywords": [
+    "rabbitmq",
+    "rabbit",
+    "nodejs",
+    "eventemitter"
+  ],
+  "author": "kimonniez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kimonniez/rabbitEE/issues"
+  },
+  "homepage": "https://github.com/kimonniez/rabbitEE#readme"
+}
