@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/kimonniez/rabbitEE#readme",
   "dependencies": {
-    "amqp": "^0.2.7"
+    "amqplib": "^0.5.3"
   }
 }
