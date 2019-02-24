@@ -69,4 +69,6 @@ const ree = new RabbitEE(config);
 })();
 ```
 
-For using exchanges and 
+If you need to use exchanges try to check `/examples` dir
+
+Maybe in future disconnects handling, sending acknowledgement handling etc. will appear :)
