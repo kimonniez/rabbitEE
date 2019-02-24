@@ -69,23 +69,6 @@ class RabbitEE extends EventEmitter {
     }
 
     /**
-     * listen method - subscribing to channels
-     * @param channelName
-     */
-    listen = (channelName) => {
-        if (!this.channels[channelName]) {
-            throw new Error(`Listen Error. There is no channel ${channelName}`);
-        }
-        const channel = this.channels[channelName];
-
-        channel.assertQueue(channelName, {durable: false});
-        channel.consume(channelName, (msg) => {
-            console.log(" [x] Received %s", msg.content.toString());
-            this.emit(channelName, msg.content.toString());
-        }, {noAck: true});
-    };
-
-    /**
      * Async method getConnect for connection
      * @returns {Promise<*>}
      */
@@ -129,20 +112,99 @@ class RabbitEE extends EventEmitter {
 
     /**
      * Send @data to channel by @channelName
-     * @param channelName
-     * @param data
+     * @param channelOpts
+     * @param {string} data
      */
-    send = (channelName, data) => {
-        if (!this.channels[channelName]) {
-            throw new Error(`Send Error. There is no channel ${channelName}`);
+    send = (channelOpts, data) => {
+        if (!this.channels[channelOpts.channelName]) {
+            throw new Error(`Send Error. There is no channel ${channelOpts.channelName}`);
         }
         if (typeof data !== 'string' || data instanceof String) {
             throw new Error(`Send Error. Data is not String`);
         }
-        const channel = this.channels[channelName];
 
-        channel.assertQueue(channelName, {durable: false});
-        channel.sendToQueue(channelName, new Buffer.from(data));
+        const channel = this.channels[channelOpts.channelName];
+
+        if (channelOpts.exchange) {
+            const exchange = channelOpts.exchange.name;
+            const exchangeType = channelOpts.exchange.type || 'fanout';
+
+            const routingKey = channelOpts.exchange.routingKey || '';
+            channel.assertExchange(exchange, exchangeType, {durable: false}, (err, ok) => {
+                if (err) {
+                    throw new Error(`Assert exchange failed`);
+                }
+            });
+            channel.publish(exchange, routingKey, new Buffer.from(data));
+            if (this.config.verbose) {
+                console.log(" [x] Sent %s", data);
+            }
+        } else {
+            channel.assertQueue(channelOpts.channelName, {durable: false}, (err, q) => {
+                if (err) {
+                    throw new Error(`Assert queue failed`);
+                }
+            });
+            channel.sendToQueue(channelOpts.channelName, new Buffer.from(data));
+        }
+    };
+
+    /**
+     * listen method - subscribing to channels
+     * @param channelOpts
+     */
+    listen = (channelOpts) => {
+        if (!this.channels[channelOpts.channelName]) {
+            throw new Error(`Listen Error. There is no channel ${channelOpts.channelName}`);
+        }
+        const channel = this.channels[channelOpts.channelName];
+
+        if (channelOpts.exchange) {
+            const exchange = channelOpts.exchange.name;
+            const exchangeType = channelOpts.exchange.type || 'fanout';
+            const routingKey = channelOpts.exchange.routingKey || '';
+
+            channel.assertExchange(exchange, exchangeType, {durable: false}, (err, ok) => {
+                if (err) {
+                    throw new Error(`Assert exchange failed`);
+                }
+            });
+            channel.assertQueue(routingKey, {durable: false}, (err, q) => {
+                if (err) {
+                    throw new Error(`Assert queue failed`);
+                }
+
+                if (this.config.verbose) {
+                    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+                }
+
+                channel.bindQueue(q.queue, exchange, routingKey);
+                channel.consume(q.queue, (msg) => {
+                    if (msg.content && this.config.verbose) {
+                        console.log(" [x] %s", msg.content.toString());
+                    }
+
+                    this.emit(`${channelOpts.channelName}_${exchange}_${routingKey}`, msg.content.toString());
+
+                }, {noAck: true});
+            });
+        } else {
+            channel.assertQueue(channelOpts.channelName, {durable: false}, (err, q) => {
+                if (err) {
+                    throw new Error(`Assert queue failed`);
+                }
+            });
+            channel.consume(channelOpts.channelName, (msg) => {
+                if (this.config.verbose) {
+                    console.log(" [x] Received %s", msg.content.toString());
+                }
+
+                this.emit(channelOpts.channelName, msg.content.toString());
+
+            }, {noAck: true});
+        }
+
+
     };
 
 }
