@@ -1,11 +1,11 @@
-#RabbitEE
+# RabbitEE
 The simplest EventBased wrapper for RabbitMQ
 
-###Disclamer
+### Disclamer
 This is pre-pre-pre alpha version :)
 So use it at one's own risk.
 
-###Usage 
+### Usage 
 
 HINT: use `--harmony` flag for node. E.G.:
 ```
