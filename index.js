@@ -65,6 +65,9 @@ class RabbitEE extends EventEmitter {
      */
     constructor(config){
         super();
+        if (!config.url) {
+            throw new Error('Config URL required');
+        }
         this.config = config;
     }
 
