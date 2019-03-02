@@ -9,6 +9,7 @@ const ree = new RabbitEE(config);
 
 (async()=> {
     await ree.connect();
+
     await ree.createChannel('test');
 
     const consumeOptions = {

@@ -14,8 +14,8 @@ const ree = new RabbitEE(config);
     const sendOptions = {
         channelName: 'test',
         exchange: {
-            name: 'myExchange',
-            type: 'fanout',
+            name: 'myExchange1',
+            type: 'topic',
             routingKey: 'queue' //routingKey is queue name
         }
     };

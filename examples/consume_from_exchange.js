@@ -14,15 +14,16 @@ const ree = new RabbitEE(config);
     const consumeOptions = {
         channelName: 'test',
         exchange: {
-            name: 'myExchange',
-            type: 'fanout',
+            name: 'myExchange1',
+            type: 'topic',
             routingKey: 'queue' //routingKey is queue name
         }
     };
 
     ree.listen(consumeOptions);
     //Event name is assembling from channelName, exchange.name and exchange.routingKey
-    ree.on('test_myExchange_queue', (val) => {
+    ree.on('test_myExchange1_queue', (val) => {
         console.log(val);
     });
 })();
+
