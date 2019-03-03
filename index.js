@@ -282,7 +282,7 @@ class RabbitEE extends EventEmitter {
             const exchangeType = channelOpts.exchange.type || 'fanout';
 
             const routingKey = channelOpts.exchange.routingKey || '';
-            channel.assertExchange(exchange, exchangeType, {durable: false}, (err, ok) => {
+            channel.assertExchange(exchange, exchangeType, {durable: true}, (err, ok) => {
                 if (err) {
                     throw new Error(`Assert exchange failed`);
                 }
@@ -292,7 +292,7 @@ class RabbitEE extends EventEmitter {
                 console.log(" [x] Sent %s", data);
             }
         } else {
-            channel.assertQueue(channelOpts.channelName, {durable: false}, (err, q) => {
+            channel.assertQueue(channelOpts.channelName, {durable: true}, (err, q) => {
                 if (err) {
                     throw new Error(`Assert queue failed`);
                 }
@@ -317,12 +317,12 @@ class RabbitEE extends EventEmitter {
             const exchangeType = channelOpts.exchange.type || 'fanout';
             const routingKey = channelOpts.exchange.routingKey || '';
 
-            channel.assertExchange(exchange, exchangeType, {durable: false}, (err, ok) => {
+            channel.assertExchange(exchange, exchangeType, {durable: true}, (err, ok) => {
                 if (err) {
                     throw new Error(`Assert exchange failed`);
                 }
             });
-            channel.assertQueue(routingKey, {durable: false}, (err, q) => {
+            channel.assertQueue(routingKey, {durable: true}, (err, q) => {
                 if (err) {
                     throw new Error(`Assert queue failed`);
                 }
@@ -340,7 +340,7 @@ class RabbitEE extends EventEmitter {
                 }, {noAck: true});
             });
         } else {
-            channel.assertQueue(channelOpts.channelName, {durable: false}, (err, q) => {
+            channel.assertQueue(channelOpts.channelName, {durable: true}, (err, q) => {
                 if (err) {
                     throw new Error(`Assert queue failed`);
                 }
