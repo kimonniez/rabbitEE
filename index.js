@@ -362,7 +362,7 @@ class RabbitEE extends EventEmitter {
      * @returns {string}
      */
     assembleEventName = (channelOpts) => {
-        return `${channelOpts.channelName}_${exchange}_${routingKey}`;
+        return `${channelOpts.channelName}_${channelOpts.exchange.name}_${channelOpts.exchange.routingKey}`;
     };
 
 }
