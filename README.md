@@ -1,9 +1,9 @@
 # RabbitEE
-The simplest EventBased wrapper for RabbitMQ
+The simplest EventBased wrapper for RabbitMQ. 
+Reconnection is available.
 
 ### Disclamer
-This is pre-pre-pre alpha version :)
-So use it at one's own risk.
+Use it at one's own risk.
 
 ### Usage 
 
@@ -71,4 +71,6 @@ const ree = new RabbitEE(config);
 
 If you need to use exchanges try to check `/examples` dir
 
-Maybe in future disconnects handling, sending acknowledgement handling etc. will appear :)
+### Known bugs
+Consumers can't start if Rabbit is not available in the start moment. After start reconnection works.
+

@@ -356,6 +356,15 @@ class RabbitEE extends EventEmitter {
 
     };
 
+    /**
+     * Assemble event name for listening
+     * @param channelOpts
+     * @returns {string}
+     */
+    assembleEventName = (channelOpts) => {
+        return `${channelOpts.channelName}_${exchange}_${routingKey}`;
+    };
+
 }
 
 module.exports = RabbitEE;
